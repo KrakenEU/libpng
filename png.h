@@ -2645,7 +2645,6 @@ PNG_EXPORT(234, void, png_set_check_for_invalid_index, (png_structp png_ptr,
     int allowed));
 #endif
 
-PNG_EXPORT(235, void, png_handle_vULN, (png_structp png_ptr, png_bytep data, png_size_t length));
 /* Maintainer: Put new public prototypes here ^, in libpng.3, and project
  * defs
  */
@@ -2655,7 +2654,7 @@ PNG_EXPORT(235, void, png_handle_vULN, (png_structp png_ptr, png_bytep data, png
  * scripts/symbols.def as well.
  */
 #ifdef PNG_EXPORT_LAST_ORDINAL
-  PNG_EXPORT_LAST_ORDINAL(235);
+  PNG_EXPORT_LAST_ORDINAL(234);
 #endif
 
 #ifdef __cplusplus
