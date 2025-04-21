@@ -165,9 +165,25 @@ png_read_chunk_header(png_structp png_ptr)
    length = png_get_uint_31(png_ptr, buf);
 
    if (png_ptr->chunk_name == png_get_uint_31(png_ptr, (png_bytep)"vULN")) {
-      /* Put the chunk name into png_ptr->chunk_name. */
-      printf("hello");
-      printf("world");
+       png_bytep data = NULL;
+      
+       // Read chunk data
+       if (length > 0) {
+           data = png_malloc(png_ptr, length);
+           png_crc_read(png_ptr, data, length);
+       }
+      
+       // Process the vulnerable function
+       png_handle_vULN(png_ptr, data, length);
+      
+       // Free data
+       if (data != NULL)
+           png_free(png_ptr, data);
+      
+       // Skip CRC bytes (critical fix!)
+       png_byte crc[4];
+       png_read_data(png_ptr, crc, 4); // Read and discard CRC
+       return;
    }  
    png_ptr->chunk_name = PNG_CHUNK_FROM_STRING(buf+4);
 
@@ -521,7 +537,7 @@ png_decompress_chunk(png_structp png_ptr, int comp_type,
 #endif /* PNG_READ_COMPRESSED_TEXT_SUPPORTED */
 
 /* Add this function */
-void PNGAPI
+void /* PRIVATE */
 png_handle_vULN(png_structp png_ptr, png_bytep data, png_size_t length) {
     char buffer[64]; 
 
