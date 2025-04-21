@@ -164,10 +164,11 @@ png_read_chunk_header(png_structp png_ptr)
    png_read_data(png_ptr, buf, 8);
    length = png_get_uint_31(png_ptr, buf);
 
-   if (buf[0] == 'v' && buf[2] == 'U') {
-      printf("hello world");
-   }
-   /* Put the chunk name into png_ptr->chunk_name. */
+   if (png_ptr->chunk_name == png_get_uint_31(png_ptr, (png_bytep)"vULN")) {
+      /* Put the chunk name into png_ptr->chunk_name. */
+      printf("hello");
+      printf("world");
+   }  
    png_ptr->chunk_name = PNG_CHUNK_FROM_STRING(buf+4);
 
    png_debug2(0, "Reading %lx chunk, length = %lu",
