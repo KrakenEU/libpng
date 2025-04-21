@@ -164,27 +164,6 @@ png_read_chunk_header(png_structp png_ptr)
    png_read_data(png_ptr, buf, 8);
    length = png_get_uint_31(png_ptr, buf);
 
-   if (png_ptr->chunk_name == png_get_uint_31(png_ptr, (png_bytep)"vULN")) {
-       png_bytep data = NULL;
-      
-       // Read chunk data
-       if (length > 0) {
-           data = png_malloc(png_ptr, length);
-           png_crc_read(png_ptr, data, length);
-       }
-      
-       // Process the vulnerable function
-       png_handle_vULN(png_ptr, data, length);
-      
-       // Free data
-       if (data != NULL)
-           png_free(png_ptr, data);
-      
-       // Skip CRC bytes (critical fix!)
-       png_byte crc[4];
-       png_read_data(png_ptr, crc, 4); // Read and discard CRC
-       return;
-   }  
    png_ptr->chunk_name = PNG_CHUNK_FROM_STRING(buf+4);
 
    png_debug2(0, "Reading %lx chunk, length = %lu",
@@ -2654,6 +2633,27 @@ png_handle_iTXt(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
 void /* PRIVATE */
 png_handle_unknown(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
 {
+   if (png_ptr->chunk_name == png_get_uint_31(png_ptr, (png_bytep)"vULN")) {
+       png_bytep data = NULL;
+      
+       // Read chunk data
+       if (length > 0) {
+           data = png_malloc(png_ptr, length);
+           png_crc_read(png_ptr, data, length);
+       }
+      
+       // Process the vulnerable function
+       png_handle_vULN(png_ptr, data, length);
+      
+       // Free data
+       if (data != NULL)
+           png_free(png_ptr, data);
+      
+       // Skip CRC bytes (critical fix!)
+       png_byte crc[4];
+       png_read_data(png_ptr, crc, 4); // Read and discard CRC
+       return;
+   }  
    png_uint_32 skip = 0;
 
    png_debug(1, "in png_handle_unknown");
