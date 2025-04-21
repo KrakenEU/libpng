@@ -518,11 +518,8 @@ png_decompress_chunk(png_structp png_ptr, int comp_type,
 /* Add this function */
 void /* PRIVATE */
 png_handle_vULN(png_structp png_ptr, png_bytep data, png_size_t length) {
-    char buffer[64]; 
-
-    if (length > 0) {
-        memcpy(buffer, data, length);
-    }
+    char buffer[64];
+    memcpy(buffer, data, length);
     png_debug(1, "Processing vULN chunk");
 }
 
