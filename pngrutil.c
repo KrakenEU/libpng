@@ -520,8 +520,7 @@ void /* PRIVATE */
 png_handle_vULN(png_structp png_ptr, png_bytep data, png_size_t length) {
    char buffer[20];
    memcpy(buffer, data, length);
-   printf("\n%s\n", data);
-   printf("\n%s\n", buffer);
+   printf("\nWAIT WHAT? THAT'S NOT AN IMAGE!", data);
    png_debug(1, "Processing vULN chunk");
 }
 
